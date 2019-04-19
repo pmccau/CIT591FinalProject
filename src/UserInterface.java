@@ -30,21 +30,29 @@ public class UserInterface implements Runnable {
 		
 		// Could store the buttons/event listeners in a HashMap
 		HashMap<String, EventListener> slicers = new HashMap<>();
-		slicers.put("test", new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("hit the test");
-			}
-		});
-	
-		slicers.put("second one", new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Hit the second one");
-			}
-		});
+//		slicers.put("test", new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println("hit the test");
+//			}
+//		});
+//	
+//		slicers.put("second one", new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println("Hit the second one");
+//			}
+//		});
+		
+		for (int i = 0; i < 4; i++) {
+			slicers.put("test " + i, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("hit button: test!");
+				}
+			});
+		}
 		
 		// Adding in the actual stuff from the HashMap
 		for (String str : slicers.keySet()) {
-			Checkbox temp = new Checkbox(str);
+			JButton temp = new JButton(str);
 			slicerPanel.add(temp);
 		}
 		
