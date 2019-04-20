@@ -6,9 +6,12 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 class AnalyzerTest {
-
+	
+	/**
+	 * This will test the data typing in the analyzer
+	 */
 	@Test
-	void test() {
+	void testDataTypes() {
 		Analyzer testAnalyzer = new Analyzer("District Employees and Finance - District Budget");
 		
 		assertEquals(testAnalyzer.getDataType("OPERATING_CYEST_LUMPSUM_AMT"), "double");

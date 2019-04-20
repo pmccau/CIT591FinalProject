@@ -10,20 +10,23 @@ public class Analyzer {
 	private HashMap<String, String> records = new HashMap<>();	
 	
 	/**
-	 * 
-	 * @param recordKeys
+	 * Constructor for the Analyzer class.
+	 * @param dataset The dataset to be analyzed. Must be stored in the 'data' folder
+	 * and be a .txt file. Originally was using .csv, but some of the data contains commas.
+	 * Might be able to actually do this using just getNext() instead of getNextLine().split.
+	 * Probably will refactor this shortly.
 	 * @param recordValues
 	 */
 	public Analyzer(String dataset) {
 		
 		try {
-			Scanner in = new Scanner(new File("data\\" + dataset + ".csv"));
+			Scanner in = new Scanner(new File("data\\" + dataset + ".txt"));
 			String[] recordKeys = null;
 			String[] recordValues = null;
 			
 			// Quick check to make sure there's data...
 			if (in.hasNextLine()) {
-				recordKeys = in.nextLine().split(",");
+				recordKeys = in.nextLine().split("\t");
 			} else {
 				System.out.println("Did not find any lines");
 				return;
@@ -31,7 +34,7 @@ public class Analyzer {
 			
 			// Build out the records data structure
 			while (in.hasNextLine()) {
-				recordValues = in.nextLine().split(",");
+				recordValues = in.nextLine().split("\t");
 				for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 					
 					// Add in the record types to the HashMap. All numbers will be cast to double
@@ -49,16 +52,14 @@ public class Analyzer {
 						if (recordTypes.get(recordKeys[i]).equals("double")) {
 							try {
 								Double.parseDouble(recordValues[i]);
-								recordTypes.put(recordKeys[i], "double");
 							} catch (NumberFormatException e) {
+								System.out.println("Caught an error at " + recordKeys[i] +"\tValue: " + recordValues[i]);
 								recordTypes.put(recordKeys[i], "String");
 							}	
 						}	
-					}
-					
+					}					
 					records.put(recordKeys[i], recordValues[i]);
-				}
-				
+				}				
 			}
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -97,5 +98,6 @@ public class Analyzer {
 		String[] values = {"50.0", "40", "String val", "string"};
 		
 		Analyzer newRecord = new Analyzer("District Employees and Finance - District Budget");
+		System.out.println(newRecord.getGroupByFields());
 	}
 }
