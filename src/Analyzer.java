@@ -31,7 +31,6 @@ public class Analyzer {
 			// Build out the records data structure
 			while (in.hasNextLine()) {
 				recordValues = in.nextLine().split(",");
-				
 				for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 					
 					// Add in the record types to the HashMap. All numbers will be cast to double
