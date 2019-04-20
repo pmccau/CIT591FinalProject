@@ -11,6 +11,49 @@ public class UserInterface implements Runnable {
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	
 	/**
+	 * This will be the place where the file to be analyzed is selected.
+	 * This should have a dropdown menu with the various data sets. Selection
+	 * of one set should trigger a refresh of the slicer area. This will be contained 
+	 * at the top of the topLevel panel
+	 * @return
+	 */
+	public JPanel fileSelection() {
+		JPanel panel = new JPanel();
+		
+		return panel;
+	}
+	
+	/**
+	 * This method will take in the dataset that is being analyzed. From there,
+	 * it will generate checkboxes / slicers on how to pivot the data. This will
+	 * be contained in the middle of the topLevel panel. This will need to interact
+	 * with the I/O methods in order to loop through and generate the possible fields.
+	 * We could hardcode this, but it might get unwieldy
+	 * @param dataSet The dataset being analyzed
+	 * @return
+	 */
+	public JPanel slicerArea(String dataSet) {
+		JPanel panel = new JPanel();
+		
+		return panel;
+	}
+	
+	/**
+	 * This method will be responsible for generating and housing the buttons:
+	 *  - Export to CSV
+	 *  - Visualize
+	 *  - Clear selections
+	 * It will need to interact with the visualization module and the I/O. Everything
+	 * that is decided in the UI will also need to be passed to the analysis module
+	 * @return
+	 */
+	public JPanel buttonArea() {
+		JPanel panel = new JPanel();
+		
+		return panel;
+	}
+	
+	/**
 	 * This will be the top-level container for the GUI. 
 	 * This panel will have multiple sub-panels and buttons embedded
 	 * within it, but will serve as the main housing for all those
@@ -28,19 +71,8 @@ public class UserInterface implements Runnable {
 		JPanel slicerPanel = new JPanel();
 		slicerPanel.setLayout(new GridLayout());
 		
-		// Could store the buttons/event listeners in a HashMap
+		// Could store the buttons/event listeners in a HashMap. 
 		HashMap<String, EventListener> slicers = new HashMap<>();
-//		slicers.put("test", new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				System.out.println("hit the test");
-//			}
-//		});
-//	
-//		slicers.put("second one", new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				System.out.println("Hit the second one");
-//			}
-//		});
 		
 		for (int i = 0; i < 4; i++) {
 			slicers.put("test " + i, new ActionListener() {
