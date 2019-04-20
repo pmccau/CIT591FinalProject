@@ -1,11 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Analyzer {
 	
-	private static HashMap<String, String> recordTypes = new HashMap<>();
+	private HashMap<String, String> recordTypes = new HashMap<>();
 	private HashMap<String, String> records = new HashMap<>();	
 	
 	/**
@@ -34,16 +35,28 @@ public class Analyzer {
 				for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 					
 					// Add in the record types to the HashMap. All numbers will be cast to double
+					// Everything else will be a String
 					if (!recordTypes.containsKey(recordKeys[i])) {
 						try {
 							Double.parseDouble(recordValues[i]);
 							recordTypes.put(recordKeys[i], "double");
-							continue;
 						} catch (NumberFormatException e) {
-							e.printStackTrace();
-						}
-						recordTypes.put(recordKeys[i], "String");
+							recordTypes.put(recordKeys[i], "String");
+						}						
+					} else {
+						// This is here because there are some fields where the first record is numerical,
+						// but not the whole column. They need to be caught and set to Strings
+						if (recordTypes.get(recordKeys[i]).equals("double")) {
+							try {
+								Double.parseDouble(recordValues[i]);
+								recordTypes.put(recordKeys[i], "double");
+							} catch (NumberFormatException e) {
+								recordTypes.put(recordKeys[i], "String");
+							}	
+						}	
 					}
+					
+					records.put(recordKeys[i], recordValues[i]);
 				}
 				
 			}
@@ -52,15 +65,33 @@ public class Analyzer {
 			e1.printStackTrace();
 		}
 		
-	}	
-	
-	/**
-	 * This will clear the recordTypes data structure (static structure)
-	 */
-	public static void flushRecordTypes() {
-		recordTypes = new HashMap<>();
 	}
 	
+	/**
+	 * This method will return the available fields that can be used to pivot.
+	 * This will be simply those that are not numerical
+	 * @return ArrayList containing the pivot fields
+	 */
+	public ArrayList<String> getGroupByFields() {
+		ArrayList<String> output = new ArrayList<>();
+		for (String str : recordTypes.keySet()) {
+			if (getDataType(str).equals("String")) {
+				output.add(str);
+			}
+		}
+		return output;
+	}
+	
+	/**
+	 * This method will return the data type of a given record. All numerical
+	 * records will be represented as doubles; all others as strings
+	 * @param field The exact name of the field to be queried
+	 * @return 'String' or 'Double', depending on the data type
+	 */
+	public String getDataType(String field) {
+		return recordTypes.get(field);
+	}
+		
 	public static void main(String[] args) {
 		String[] columns = {"this", "is", "a", "column"};
 		String[] values = {"50.0", "40", "String val", "string"};
