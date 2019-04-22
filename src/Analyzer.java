@@ -92,6 +92,17 @@ public class Analyzer {
 	public String getDataType(String field) {
 		return recordTypes.get(field);
 	}
+	
+	/**
+	 * Stub for the pivot by method. This will be where the data gets sliced up. This will
+	 * be where most of the heavy lifting takes place in this class 
+	 * @param fields The fields (in order) to be pivoted by
+	 * @return TBD. Perhaps this could write directly to the output? Or pass whatever is needed
+	 * to the visualizer
+	 */
+	public double pivotDataBy(ArrayList<String> fields) {
+		return 0.0;
+	}
 		
 	public static void main(String[] args) {
 		String[] columns = {"this", "is", "a", "column"};
