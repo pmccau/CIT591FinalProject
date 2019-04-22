@@ -10,4 +10,4 @@ The overarching concept of this project is to create a desktop application that 
 
 <b>External Libraries</b><ul>
   <li>GUI using Swing library</li>
-  <li>Data visualization using <a href="https://www.graphviz.org/">Graphviz</a></li></ul>
+  <li>Data visualization using <a href="http://www.jfree.org/jfreechart/">JFreeChart</a></li></ul>
