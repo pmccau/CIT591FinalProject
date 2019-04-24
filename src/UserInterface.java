@@ -1,21 +1,16 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.HashMap;
-
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
+import javax.swing.border.*;
 
 public class UserInterface implements Runnable {
 	
-	Analyzer analyzer = new Analyzer(null);
-	String dataFolder = "data/";
-	String selectedDataset;
-	JPanel slicerArea, fileSelection, topLevel, buttonArea;
-
+	private Analyzer analyzer = new Analyzer(null);
+	private String dataFolder = "data/";
+	private String selectedDataset;
+	private JPanel slicerArea, fileSelection, topLevel, buttonArea;
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	
 	/**
@@ -154,7 +149,6 @@ public class UserInterface implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				selectedDataset = (String) cb.getSelectedItem(); 
-				System.out.println("Setting the analyzer to : " + selectedDataset);
 				analyzer = new Analyzer(selectedDataset);
 				slicerArea = slicerArea(panel);
 				panel.remove(1);
@@ -170,11 +164,31 @@ public class UserInterface implements Runnable {
 		JButton clearButton = (JButton) ((JPanel) buttonArea.getComponent(1)).getComponent(3);
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Cleared!");
 				selectionBox.setSelectedIndex(-1);
 			}
 		});
 		
+		// This is the event listener for the "Export" button. It will trigger a save dialog box,
+		// then export a csv to that location
+		JButton exportButton = (JButton) ((JPanel) buttonArea.getComponent(1)).getComponent(1);
+		exportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String filename, directory;
+				
+				// This is the file chooser
+				JFileChooser fc = new JFileChooser();
+				int rVal = fc.showSaveDialog(exportButton);
+			      if (rVal == JFileChooser.APPROVE_OPTION) {
+			        filename = fc.getSelectedFile().getName();
+			        directory = fc.getCurrentDirectory().toString();
+			        System.out.println("Tried to save with " + directory.toString() + "\\" + filename.toString());
+			      }
+			      if (rVal == JFileChooser.CANCEL_OPTION) {
+			        System.out.println("CANCELLED!");
+			      }
+			}
+		});
+						
 		//                                   END OF EVENT LISTENERS   
 		// ______________________________________________________________________________________
 		
