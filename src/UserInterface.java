@@ -39,13 +39,18 @@ public class UserInterface implements Runnable {
 		// This will set the selectedDataset value to the selected value in the
 		// ComboBox
 		JComboBox datasetSelection = new JComboBox(datasets);
-				
+		
+		JPanel gridPanel = new JPanel(new GridLayout(3, 1));
+		gridPanel.add(new JPanel());
+		
 		// Add the panel
 		JPanel panel = new JPanel(new FlowLayout());
 		panel.add(new JPanel().add(new Label("Select dataset:")));
 		panel.add(datasetSelection);
 		panel.add(new JPanel());
-		return panel;
+		
+		gridPanel.add(panel);
+		return gridPanel;
 	}
 	
 	/**
@@ -58,14 +63,15 @@ public class UserInterface implements Runnable {
 	 * @return
 	 */
 	public JPanel slicerArea(JPanel topLevel) {
-				
-		JPanel panel = new JPanel(new FlowLayout());
-//		panel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.BLACK, Color.BLACK));
-		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
-		panel.setBackground(new Color(196, 196, 196));
 		
-		for (String str : analyzer.getGroupByFields()) {
-			System.out.println(str);
+		String[] fields = analyzer.getGroupByFields().toString().split(",");
+//		String[] fields = analyzer.getGroupByFields().toArray();
+		
+		JPanel panel = new JPanel(new GridLayout((fields.length / 3 + 1), 3));
+		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+		panel.setPreferredSize(new Dimension(fields.length / 3 * 30, 200));
+		
+		for (String str : fields) {
 			panel.add(new JCheckBox(str));
 		}
 		
@@ -126,7 +132,7 @@ public class UserInterface implements Runnable {
 		fileSelection = fileSelection(panel);
 		
 		// Add an event listener to the comboBox
-		JComboBox selectionBox = (JComboBox) fileSelection.getComponent(1);
+		JComboBox selectionBox = (JComboBox) ((JPanel) fileSelection.getComponent(1)).getComponent(1);
 		selectionBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
@@ -134,13 +140,17 @@ public class UserInterface implements Runnable {
 				System.out.println("Setting the analyzer to : " + selectedDataset);
 				analyzer = new Analyzer(selectedDataset);
 				slicerArea = slicerArea(panel);
+				panel.remove(1);
+				panel.add(slicerArea, 1);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		
 		panel.add(fileSelection);
 		panel.add(slicerArea);
 		panel.add(inputsPanel);						
-		
+		panel.setPreferredSize(new Dimension(800, 500));
 		return panel;
 	};
 	
