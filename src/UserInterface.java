@@ -6,12 +6,14 @@ import java.util.EventListener;
 import java.util.HashMap;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 public class UserInterface implements Runnable {
 	
-	Analyzer analysis = new Analyzer(null);
+	Analyzer analyzer = new Analyzer(null);
 	String dataFolder = "data/";
 	String selectedDataset;
+	JPanel slicerArea, fileSelection, topLevel, buttonArea;
 
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	
@@ -22,7 +24,7 @@ public class UserInterface implements Runnable {
 	 * at the top of the topLevel panel
 	 * @return
 	 */
-	public JPanel fileSelection() {
+	public JPanel fileSelection(JPanel topLevel) {
 		
 		File folder = new File(dataFolder);
 		File[] listOfDatasets = folder.listFiles();
@@ -31,7 +33,6 @@ public class UserInterface implements Runnable {
 		for (int i = 0; i < datasets.length; i++) {
 			String temp = listOfDatasets[i].toString();
 			temp = temp.substring(dataFolder.length(), temp.indexOf("."));
-			
 			datasets[i] = temp;
 		}
 		
@@ -42,11 +43,18 @@ public class UserInterface implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				selectedDataset = (String) cb.getSelectedItem(); 
+				System.out.println("Setting the analyzer to : " + selectedDataset);
+				analyzer = new Analyzer(selectedDataset);
+				
+				topLevel.repaint();
 			}
 		});
 		
-		JPanel panel = new JPanel();
+		// Add the panel
+		JPanel panel = new JPanel(new FlowLayout());
+		panel.add(new JPanel().add(new Label("Select dataset:")));
 		panel.add(datasetSelection);
+		panel.add(new JPanel());
 		return panel;
 	}
 	
@@ -59,8 +67,17 @@ public class UserInterface implements Runnable {
 	 * @param dataSet The dataset being analyzed
 	 * @return
 	 */
-	public JPanel slicerArea(String dataSet) {
-		JPanel panel = new JPanel();
+	public JPanel slicerArea(JPanel topLevel) {
+				
+		JPanel panel = new JPanel(new FlowLayout());
+//		panel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.BLACK, Color.BLACK));
+		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+		panel.setBackground(new Color(196, 196, 196));
+		
+		for (String str : analyzer.getGroupByFields()) {
+			System.out.println(str);
+			panel.add(new JCheckBox(str));
+		}
 		
 		return panel;
 	}
@@ -115,28 +132,20 @@ public class UserInterface implements Runnable {
 			slicerPanel.add(temp);
 		}
 		
-		panel.add(fileSelection());
+		slicerArea = slicerArea(panel);
+		fileSelection = fileSelection(panel);
 		
-//		JButton button2 = new JButton("test");
-//		panel.add(button2);
-		
-		panel.add(inputsPanel);
-		panel.add(slicerPanel);
-				
-		JButton button1 = new JButton("test");
-		panel.add(button1);
-		
+		panel.add(fileSelection);
+		panel.add(slicerArea);
+		panel.add(inputsPanel);						
 		
 		return panel;
 	};
 	
 	// Run method. This will be called to generate the GUI
 	public void run() {
-		frame.add(topLevel());
-		
-//		frame.setPreferredSize(new Dimension(745, 375));
-//		frame.setMaximumSize(frame.getPreferredSize());
-//		frame.setResizable(false);
+		topLevel = topLevel();
+		frame.add(topLevel);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
@@ -144,7 +153,7 @@ public class UserInterface implements Runnable {
 	}
 	
 	/**
-	 * Main method. Funtion TBD 
+	 * Main method. Function TBD 
 	 * @param args
 	 */
 	public static void main(String[] args) {
