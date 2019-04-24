@@ -138,35 +138,17 @@ public class UserInterface implements Runnable {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(3, 1));
 		
-		
-		JPanel inputsPanel = new JPanel();
-		inputsPanel.setLayout(new BorderLayout());
-		
-		JPanel slicerPanel = new JPanel();
-		slicerPanel.setLayout(new GridLayout());
-		
 		// Could store the buttons/event listeners in a HashMap. 
 		HashMap<String, EventListener> slicers = new HashMap<>();
-		
-		for (int i = 0; i < 4; i++) {
-			slicers.put("test " + i, new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("hit button: test!");
-				}
-			});
-		}
-		
-		// Adding in the actual stuff from the HashMap
-		for (String str : slicers.keySet()) {
-			JButton temp = new JButton(str);
-			slicerPanel.add(temp);
-		}
 		
 		slicerArea = slicerArea(panel);
 		fileSelection = fileSelection(panel);
 		buttonArea = buttonArea();
 		
-		// Add an event listener to the comboBox
+		//----------------------------------------------------------------------------------------
+		//                                   EVENT LISTENERS SECTION
+		
+		// Add an event listener to the comboBox so that selection values appear when dataset chosen
 		JComboBox selectionBox = (JComboBox) ((JPanel) fileSelection.getComponent(1)).getComponent(1);
 		selectionBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -182,6 +164,21 @@ public class UserInterface implements Runnable {
 			}
 		});
 		
+		// This is the event listener for the "Clear" button - it doesn't need to do much work,
+		// can out source it to the listener on the ComboBox itself as setting that to blank will
+		// clear the slicer values
+		JButton clearButton = (JButton) ((JPanel) buttonArea.getComponent(1)).getComponent(3);
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Cleared!");
+				selectionBox.setSelectedIndex(-1);
+			}
+		});
+		
+		//                                   END OF EVENT LISTENERS   
+		// ______________________________________________________________________________________
+		
+		// These are the actual panels that will be added
 		panel.add(fileSelection);
 		panel.add(slicerArea);
 		panel.add(buttonArea);						
