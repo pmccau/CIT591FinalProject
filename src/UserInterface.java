@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.HashMap;
 
@@ -39,6 +40,7 @@ public class UserInterface implements Runnable {
 		// This will set the selectedDataset value to the selected value in the
 		// ComboBox
 		JComboBox datasetSelection = new JComboBox(datasets);
+		datasetSelection.setSelectedIndex(-1);
 		
 		JPanel gridPanel = new JPanel(new GridLayout(3, 1));
 		gridPanel.add(new JPanel());
@@ -50,6 +52,7 @@ public class UserInterface implements Runnable {
 		panel.add(new JPanel());
 		
 		gridPanel.add(panel);
+		gridPanel.add(new JPanel().add(new Label("Select fields to include")));
 		return gridPanel;
 	}
 	
@@ -63,19 +66,30 @@ public class UserInterface implements Runnable {
 	 * @return
 	 */
 	public JPanel slicerArea(JPanel topLevel) {
+		ArrayList<String> fields = analyzer.getNumericalFields();
 		
-		String[] fields = analyzer.getGroupByFields().toString().split(",");
-//		String[] fields = analyzer.getGroupByFields().toArray();
-		
-		JPanel panel = new JPanel(new GridLayout((fields.length / 3 + 1), 3));
+		// Create the panel that will house the checkboxes
+		JPanel panel = new JPanel(new GridLayout((fields.size() / 3 + 1), 3));
 		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
-		panel.setPreferredSize(new Dimension(fields.length / 3 * 30, 200));
+		panel.setPreferredSize(new Dimension(fields.size() / 3 * 30, 200));
+		panel.setBackground(Color.WHITE);
 		
+		// Add in the checkboxes
 		for (String str : fields) {
-			panel.add(new JCheckBox(str));
+			JCheckBox cb = new JCheckBox(str);
+			cb.setPreferredSize(new Dimension(10, 25));
+			cb.setBackground(Color.WHITE);
+			
+			panel.add(cb);
 		}
 		
-		return panel;
+		// This is the outside border that will give a small buffer to the panel
+		JPanel outerPanel = new JPanel(new BorderLayout());
+		outerPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5, true));
+		
+		// Add the internal panel (panel) to the outerPanel (white border)
+		outerPanel.add(panel);
+		return outerPanel;
 	}
 	
 	/**
@@ -88,9 +102,29 @@ public class UserInterface implements Runnable {
 	 * @return
 	 */
 	public JPanel buttonArea() {
-		JPanel panel = new JPanel();
+		// The outer panel to serve as a buffer/spacing device
+		JPanel outerPanel = new JPanel(new GridLayout(3,1));
+		outerPanel.add(new JPanel());
+				
+		// The inner panel to house the buttons
+		JPanel panel = new JPanel(new GridLayout(1, 5));
+		panel.add(new JPanel());
 		
-		return panel;
+		// Create the buttons
+		JButton visualizeButton = new JButton("Visualize");
+		JButton exportButton = new JButton("Export");
+		JButton clearButton = new JButton("Clear");
+		
+		// Add the buttons and a blank panel for spacing
+		panel.add(exportButton);
+		panel.add(visualizeButton);
+		panel.add(clearButton);
+		panel.add(new JPanel());
+		
+		// Add the inner panel (panel) to the outerpanel
+		outerPanel.add(panel);
+		outerPanel.add(new JPanel());
+		return outerPanel;
 	}
 	
 	/**
@@ -130,6 +164,7 @@ public class UserInterface implements Runnable {
 		
 		slicerArea = slicerArea(panel);
 		fileSelection = fileSelection(panel);
+		buttonArea = buttonArea();
 		
 		// Add an event listener to the comboBox
 		JComboBox selectionBox = (JComboBox) ((JPanel) fileSelection.getComponent(1)).getComponent(1);
@@ -149,7 +184,7 @@ public class UserInterface implements Runnable {
 		
 		panel.add(fileSelection);
 		panel.add(slicerArea);
-		panel.add(inputsPanel);						
+		panel.add(buttonArea);						
 		panel.setPreferredSize(new Dimension(800, 500));
 		return panel;
 	};

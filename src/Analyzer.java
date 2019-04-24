@@ -26,7 +26,7 @@ public class Analyzer {
 				
 				// Quick check to make sure there's data...
 				if (in.hasNextLine()) {
-					recordKeys = in.nextLine().split("\",\"");
+					recordKeys = in.nextLine().split(",");
 				} else {
 					System.out.println("Did not find any lines");
 					return;
@@ -34,7 +34,8 @@ public class Analyzer {
 				
 				// Build out the records data structure
 				while (in.hasNextLine()) {
-					recordValues = in.nextLine().split("\",\"");
+					String temp = in.nextLine().replaceAll(", ", ";");
+					recordValues = temp.split(",");
 					for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 						
 						// Add in the record types to the HashMap. All numbers will be cast to double
@@ -78,6 +79,20 @@ public class Analyzer {
 		ArrayList<String> output = new ArrayList<>();
 		for (String str : recordTypes.keySet()) {
 			if (getDataType(str).equals("String")) {
+				output.add(str);
+			}
+		}
+		return output;
+	}
+	
+	/**
+	 * This method will return all of the available numerical fields
+	 * @return ArrayList containing the numerical fields
+	 */
+	public ArrayList<String> getNumericalFields() {
+		ArrayList<String> output = new ArrayList<>();
+		for (String str : recordTypes.keySet()) {
+			if (getDataType(str).equals("double")) {
 				output.add(str);
 			}
 		}
