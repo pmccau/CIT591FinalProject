@@ -39,17 +39,7 @@ public class UserInterface implements Runnable {
 		// This will set the selectedDataset value to the selected value in the
 		// ComboBox
 		JComboBox datasetSelection = new JComboBox(datasets);
-		datasetSelection.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				selectedDataset = (String) cb.getSelectedItem(); 
-				System.out.println("Setting the analyzer to : " + selectedDataset);
-				analyzer = new Analyzer(selectedDataset);
 				
-				topLevel.repaint();
-			}
-		});
-		
 		// Add the panel
 		JPanel panel = new JPanel(new FlowLayout());
 		panel.add(new JPanel().add(new Label("Select dataset:")));
@@ -134,6 +124,18 @@ public class UserInterface implements Runnable {
 		
 		slicerArea = slicerArea(panel);
 		fileSelection = fileSelection(panel);
+		
+		// Add an event listener to the comboBox
+		JComboBox selectionBox = (JComboBox) fileSelection.getComponent(1);
+		selectionBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox) e.getSource();
+				selectedDataset = (String) cb.getSelectedItem(); 
+				System.out.println("Setting the analyzer to : " + selectedDataset);
+				analyzer = new Analyzer(selectedDataset);
+				slicerArea = slicerArea(panel);
+			}
+		});
 		
 		panel.add(fileSelection);
 		panel.add(slicerArea);
