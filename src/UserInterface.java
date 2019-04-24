@@ -7,6 +7,8 @@ import java.util.HashMap;
 import javax.swing.*;
 
 public class UserInterface implements Runnable {
+	
+	Analyzer analysis = new Analyzer(null);
 
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	
@@ -18,8 +20,18 @@ public class UserInterface implements Runnable {
 	 * @return
 	 */
 	public JPanel fileSelection() {
-		JPanel panel = new JPanel();
 		
+		String[] test = {"this", "is", "a", "test"};
+		
+		JComboBox datasetSelection = new JComboBox(test);
+		datasetSelection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Selection made: " + e.getSource().toString());
+			}
+		});
+		
+		JPanel panel = new JPanel();
+		panel.add(datasetSelection);
 		return panel;
 	}
 	
@@ -95,9 +107,10 @@ public class UserInterface implements Runnable {
 		
 		panel.add(inputsPanel);
 		panel.add(slicerPanel);
-		
+				
 		JButton button1 = new JButton("test");
 		panel.add(button1);
+		panel.add(fileSelection());
 		
 		return panel;
 	};

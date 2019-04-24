@@ -19,51 +19,53 @@ public class Analyzer {
 	 */
 	public Analyzer(String dataset) {
 		
-		try {
-			Scanner in = new Scanner(new File("data\\" + dataset + ".txt"));
-			String[] recordKeys = null;
-			String[] recordValues = null;
-			
-			// Quick check to make sure there's data...
-			if (in.hasNextLine()) {
-				recordKeys = in.nextLine().split("\t");
-			} else {
-				System.out.println("Did not find any lines");
-				return;
-			}
-			
-			// Build out the records data structure
-			while (in.hasNextLine()) {
-				recordValues = in.nextLine().split("\t");
-				for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
-					
-					// Add in the record types to the HashMap. All numbers will be cast to double
-					// Everything else will be a String
-					if (!recordTypes.containsKey(recordKeys[i])) {
-						try {
-							Double.parseDouble(recordValues[i]);
-							recordTypes.put(recordKeys[i], "double");
-						} catch (NumberFormatException e) {
-							recordTypes.put(recordKeys[i], "String");
-						}						
-					} else {
-						// This is here because there are some fields where the first record is numerical,
-						// but not the whole column. They need to be caught and set to Strings
-						if (recordTypes.get(recordKeys[i]).equals("double")) {
+		if (dataset != null) {
+			try {
+				Scanner in = new Scanner(new File("data\\" + dataset + ".txt"));
+				String[] recordKeys = null;
+				String[] recordValues = null;
+				
+				// Quick check to make sure there's data...
+				if (in.hasNextLine()) {
+					recordKeys = in.nextLine().split("\t");
+				} else {
+					System.out.println("Did not find any lines");
+					return;
+				}
+				
+				// Build out the records data structure
+				while (in.hasNextLine()) {
+					recordValues = in.nextLine().split("\t");
+					for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
+						
+						// Add in the record types to the HashMap. All numbers will be cast to double
+						// Everything else will be a String
+						if (!recordTypes.containsKey(recordKeys[i])) {
 							try {
 								Double.parseDouble(recordValues[i]);
+								recordTypes.put(recordKeys[i], "double");
 							} catch (NumberFormatException e) {
-								System.out.println("Caught an error at " + recordKeys[i] +"\tValue: " + recordValues[i]);
 								recordTypes.put(recordKeys[i], "String");
+							}						
+						} else {
+							// This is here because there are some fields where the first record is numerical,
+							// but not the whole column. They need to be caught and set to Strings
+							if (recordTypes.get(recordKeys[i]).equals("double")) {
+								try {
+									Double.parseDouble(recordValues[i]);
+								} catch (NumberFormatException e) {
+									System.out.println("Caught an error at " + recordKeys[i] +"\tValue: " + recordValues[i]);
+									recordTypes.put(recordKeys[i], "String");
+								}	
 							}	
-						}	
-					}					
-					records.put(recordKeys[i], recordValues[i]);
-				}				
+						}					
+						records.put(recordKeys[i], recordValues[i]);
+					}				
+				}
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 		
 	}
