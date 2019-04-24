@@ -8,26 +8,25 @@ public class Analyzer {
 	
 	private HashMap<String, String> recordTypes = new HashMap<>();
 	private HashMap<String, String> records = new HashMap<>();	
+	String dataFolder = "data/";
 	
 	/**
 	 * Constructor for the Analyzer class.
 	 * @param dataset The dataset to be analyzed. Must be stored in the 'data' folder
-	 * and be a .txt file. Originally was using .csv, but some of the data contains commas.
-	 * Might be able to actually do this using just getNext() instead of getNextLine().split.
-	 * Probably will refactor this shortly.
+	 * and be a .csv file
 	 * @param recordValues
 	 */
 	public Analyzer(String dataset) {
 		
 		if (dataset != null) {
 			try {
-				Scanner in = new Scanner(new File("data\\" + dataset + ".txt"));
+				Scanner in = new Scanner(new File(dataFolder + dataset + ".csv"));
 				String[] recordKeys = null;
 				String[] recordValues = null;
 				
 				// Quick check to make sure there's data...
 				if (in.hasNextLine()) {
-					recordKeys = in.nextLine().split("\t");
+					recordKeys = in.nextLine().split("\",\"");
 				} else {
 					System.out.println("Did not find any lines");
 					return;
@@ -35,7 +34,7 @@ public class Analyzer {
 				
 				// Build out the records data structure
 				while (in.hasNextLine()) {
-					recordValues = in.nextLine().split("\t");
+					recordValues = in.nextLine().split("\",\"");
 					for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 						
 						// Add in the record types to the HashMap. All numbers will be cast to double

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.EventListener;
 import java.util.HashMap;
 
@@ -9,6 +10,8 @@ import javax.swing.*;
 public class UserInterface implements Runnable {
 	
 	Analyzer analysis = new Analyzer(null);
+	String dataFolder = "data/";
+	String selectedDataset;
 
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	
@@ -21,12 +24,24 @@ public class UserInterface implements Runnable {
 	 */
 	public JPanel fileSelection() {
 		
-		String[] test = {"this", "is", "a", "test"};
+		File folder = new File(dataFolder);
+		File[] listOfDatasets = folder.listFiles();
+		String[] datasets = new String[listOfDatasets.length];
 		
-		JComboBox datasetSelection = new JComboBox(test);
+		for (int i = 0; i < datasets.length; i++) {
+			String temp = listOfDatasets[i].toString();
+			temp = temp.substring(dataFolder.length(), temp.indexOf("."));
+			
+			datasets[i] = temp;
+		}
+		
+		// This will set the selectedDataset value to the selected value in the
+		// ComboBox
+		JComboBox datasetSelection = new JComboBox(datasets);
 		datasetSelection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Selection made: " + e.getSource().toString());
+				JComboBox cb = (JComboBox) e.getSource();
+				selectedDataset = (String) cb.getSelectedItem(); 
 			}
 		});
 		
@@ -100,7 +115,7 @@ public class UserInterface implements Runnable {
 			slicerPanel.add(temp);
 		}
 		
-		
+		panel.add(fileSelection());
 		
 //		JButton button2 = new JButton("test");
 //		panel.add(button2);
@@ -110,7 +125,7 @@ public class UserInterface implements Runnable {
 				
 		JButton button1 = new JButton("test");
 		panel.add(button1);
-		panel.add(fileSelection());
+		
 		
 		return panel;
 	};
