@@ -12,6 +12,7 @@ public class UserInterface implements Runnable {
 	private String selectedDataset;
 	private JPanel slicerArea, fileSelection, topLevel, buttonArea;
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
+	private String exportLocation = "";
 	
 	/**
 	 * This will be the place where the file to be analyzed is selected.
@@ -35,6 +36,7 @@ public class UserInterface implements Runnable {
 		// This will set the selectedDataset value to the selected value in the
 		// ComboBox
 		JComboBox datasetSelection = new JComboBox(datasets);
+		datasetSelection.setBackground(Color.WHITE);
 		datasetSelection.setSelectedIndex(-1);
 		
 		JPanel gridPanel = new JPanel(new GridLayout(3, 1));
@@ -42,12 +44,17 @@ public class UserInterface implements Runnable {
 		
 		// Add the panel
 		JPanel panel = new JPanel(new FlowLayout());
-		panel.add(new JPanel().add(new Label("Select dataset:")));
+		JLabel selectDatasetLabel = new JLabel("Select dataset:");
+		selectDatasetLabel.setFont(new Font("SelectDataset", Font.BOLD, 24));
+		panel.add(new JPanel().add(selectDatasetLabel));
 		panel.add(datasetSelection);
 		panel.add(new JPanel());
 		
+		// Add the panel with the label to select fields
 		gridPanel.add(panel);
-		gridPanel.add(new JPanel().add(new Label("Select fields to include")));
+		JLabel selectSlicersLabel = new JLabel("Select fields to include");
+		selectSlicersLabel.setFont(new Font("Slicers", Font.PLAIN, 24));;
+		gridPanel.add(selectSlicersLabel);
 		return gridPanel;
 	}
 	
@@ -74,7 +81,6 @@ public class UserInterface implements Runnable {
 			JCheckBox cb = new JCheckBox(str);
 			cb.setPreferredSize(new Dimension(10, 25));
 			cb.setBackground(Color.WHITE);
-			
 			panel.add(cb);
 		}
 		
@@ -109,6 +115,10 @@ public class UserInterface implements Runnable {
 		JButton visualizeButton = new JButton("Visualize");
 		JButton exportButton = new JButton("Export");
 		JButton clearButton = new JButton("Clear");
+		
+		visualizeButton.setFont(new Font("Font", Font.PLAIN, 24));
+		exportButton.setFont(new Font("Font", Font.PLAIN, 24));
+		clearButton.setFont(new Font("Font", Font.PLAIN, 24));
 		
 		// Add the buttons and a blank panel for spacing
 		panel.add(exportButton);
@@ -181,10 +191,10 @@ public class UserInterface implements Runnable {
 			      if (rVal == JFileChooser.APPROVE_OPTION) {
 			        filename = fc.getSelectedFile().getName();
 			        directory = fc.getCurrentDirectory().toString();
-			        System.out.println("Tried to save with " + directory.toString() + "\\" + filename.toString());
+			        exportLocation = directory.toString() + "\\" + filename.toString();
 			      }
 			      if (rVal == JFileChooser.CANCEL_OPTION) {
-			        System.out.println("CANCELLED!");
+			    	  // Do nothing
 			      }
 			}
 		});
