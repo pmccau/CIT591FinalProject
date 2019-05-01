@@ -52,7 +52,7 @@ public class DownloadFile {
 	
 //	public static void main(String[] args) {
 //		String link = "http://data.phl.opendata.arcgis.com/datasets/d46a7e59e2c246c891fbee778759717e_0.csv";
-//		File outputFile = new File("downloadFile.txt"); // Will figure later how to save it to the "data" folder
+//		File outputFile = new File("data/downloadFile.txt"); // Will figure later how to save it to the "data" folder
 //		
 //		DownloadFile df = new DownloadFile(link, outputFile);
 //		df.saveFile();
