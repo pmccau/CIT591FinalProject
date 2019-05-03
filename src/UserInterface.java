@@ -48,11 +48,11 @@ public class UserInterface implements Runnable {
 		selectDatasetLabel.setFont(new Font("SelectDataset", Font.BOLD, 24));
 		panel.add(new JPanel().add(selectDatasetLabel));
 		panel.add(datasetSelection);
-		panel.add(new JPanel());
+		panel.add(new JButton("Fetch Datasets"));
 		
 		// Add the panel with the label to select fields
 		gridPanel.add(panel);
-		JLabel selectSlicersLabel = new JLabel("Select fields to include");
+		JLabel selectSlicersLabel = new JLabel("Select numerical fields to include");
 		selectSlicersLabel.setFont(new Font("Slicers", Font.PLAIN, 24));;
 		gridPanel.add(selectSlicersLabel);
 		return gridPanel;
@@ -163,6 +163,39 @@ public class UserInterface implements Runnable {
 				slicerArea = slicerArea(panel);
 				panel.remove(1);
 				panel.add(slicerArea, 1);
+				panel.revalidate();
+				panel.repaint();
+			}
+		});
+		
+		// Fetch the datasets if they're not already populated
+		JButton fetchDatasets = (JButton) ((JPanel) fileSelection.getComponent(1)).getComponent(2);
+		fetchDatasets.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HashMap<String, String> datasets = DownloadFile.getDatasets();
+				for (String str : datasets.keySet()) {
+					DownloadFile df = new DownloadFile(datasets.get(str), new File("data\\" + str + ".csv"));
+					df.saveFile();
+				}
+				fileSelection = fileSelection(panel);
+				
+				// The listener for the selection box needs to be re-added
+				JComboBox sb = (JComboBox) ((JPanel) fileSelection.getComponent(1)).getComponent(1);
+				sb.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JComboBox cb = (JComboBox) e.getSource();
+						selectedDataset = (String) cb.getSelectedItem(); 
+						analyzer = new Analyzer(selectedDataset);
+						slicerArea = slicerArea(panel);
+						panel.remove(1);
+						panel.add(slicerArea, 1);
+						panel.revalidate();
+						panel.repaint();
+					}
+				});
+				
+				panel.remove(0);
+				panel.add(fileSelection, 0);
 				panel.revalidate();
 				panel.repaint();
 			}

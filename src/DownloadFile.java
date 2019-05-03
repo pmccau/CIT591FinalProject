@@ -5,11 +5,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 public class DownloadFile {
 
 	private String link;
 	private File outputFile;
+	
+	/**
+	 * Static method that will return a hashmap of datasets in the format
+	 * Name => URL for use in fetching the datasets to be analyzed.
+	 * @return
+	 */
+	public static HashMap<String, String> getDatasets() {
+		HashMap<String, String> datasets = new HashMap<>();
+		
+		// Add in the URLs for use in the 
+		datasets.put("District Employees and Finance - Full Time Employees", 
+				"https://cdn.philasd.org/offices/performance/Open_Data/Budget_Staff/FTE/fte_information.csv");
+		datasets.put("District Employees and Finance - District Budget", 
+				"https://cdn.philasd.org/offices/performance/Open_Data/Budget_Staff/District_Budget/budget_information.csv");
+		datasets.put("School Performance - Out-of-School Suspensions", 
+				"https://cdn.philasd.org/offices/performance/Open_Data/School_Performance/Suspensions/School%20Profiles%20Suspensions%202016-2017.csv");
+		datasets.put("School Information - Pre-School Information", 
+				"https://cdn.philasd.org/offices/performance/Open_Data/School_Information/Pre_K/PREK_INFORMATION_2013_2014.csv");
+		
+		return datasets;
+	}
 
 	
 	/**
@@ -22,7 +44,7 @@ public class DownloadFile {
 		this.link = link;
 		this.outputFile = outputFile;
 	}
-
+	
 	
 	/**
 	 * This method will read data from specified URL and save the file locally
