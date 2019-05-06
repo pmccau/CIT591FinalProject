@@ -9,7 +9,7 @@ public class UserInterface implements Runnable {
 	
 	private Analyzer analyzer = new Analyzer(null);
 	private String dataFolder = "data/";
-	private String selectedDataset;
+	private String selectedDataset, selectedNumericalValue, selectedGraphType;
 	private JPanel slicerArea, fileSelection, topLevel, buttonArea;
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	private String exportLocation = "";
@@ -52,15 +52,53 @@ public class UserInterface implements Runnable {
 		
 		// Add the panel with the label to select fields
 		gridPanel.add(panel);
-		JLabel selectSlicersLabel = new JLabel("Select numerical fields to include");
+		JLabel selectSlicersLabel = new JLabel("Select numerical field to visualize");
 		selectSlicersLabel.setFont(new Font("Slicers", Font.PLAIN, 24));;
 		gridPanel.add(selectSlicersLabel);
 		return gridPanel;
 	}
 	
 	/**
+	 * This method generates the graph type panel (pie vs. bar)
+	 * @return
+	 */
+	public JPanel graphType() {
+		String[] graphType = {"Bar", "Pie"};
+		JPanel radioPanel = new JPanel(new GridLayout(graphType.length + 2, 1));
+		JPanel panel = new JPanel(new GridLayout(1, 3));
+		JLabel label = new JLabel("Graph type");
+		label.setFont(new Font("radio", Font.BOLD, 15));
+		radioPanel.add(label);
+		
+		ButtonGroup bg = new ButtonGroup();
+		int btnCounter = 0;
+		
+		// Add in radio buttons
+		for (String str : graphType) {
+			JRadioButton temp = new JRadioButton(str, btnCounter == 0);
+			
+			btnCounter++;
+			bg.add(temp);
+			radioPanel.add(temp);
+			// Action listener for graph type
+			temp.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					selectedGraphType = str;
+				}
+			});
+		}
+				
+		radioPanel.add(new JPanel());
+		panel.add(new JPanel());
+		panel.add(radioPanel);
+		panel.add(new JPanel());
+		
+		return panel;
+	}
+	
+	/**
 	 * This method will take in the dataset that is being analyzed. From there,
-	 * it will generate checkboxes / slicers on how to pivot the data. This will
+	 * it will generate radio button slicers on how to visualize the data. This will
 	 * be contained in the middle of the topLevel panel. This will need to interact
 	 * with the I/O methods in order to loop through and generate the possible fields.
 	 * We could hardcode this, but it might get unwieldy
@@ -77,11 +115,22 @@ public class UserInterface implements Runnable {
 		panel.setBackground(Color.WHITE);
 		
 		// Add in the checkboxes
+		int buttonCtr = 0;
+		ButtonGroup bg = new ButtonGroup();
 		for (String str : fields) {
-			JCheckBox cb = new JCheckBox(str);
-			cb.setPreferredSize(new Dimension(10, 25));
-			cb.setBackground(Color.WHITE);
-			panel.add(cb);
+			JRadioButton temp = new JRadioButton(str, buttonCtr == 0);
+			buttonCtr++;
+			
+			// Action listener to flesh out the values that will be grouped 
+			temp.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					selectedNumericalValue = str;
+				}
+			});
+			
+			temp.setBackground(Color.WHITE);
+			bg.add(temp);
+			panel.add(temp);
 		}
 		
 		// This is the outside border that will give a small buffer to the panel
@@ -141,7 +190,7 @@ public class UserInterface implements Runnable {
 	 */
 	public JPanel topLevel() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 1));
+		panel.setLayout(new GridLayout(4, 1));
 		
 		// Could store the buttons/event listeners in a HashMap. 
 		HashMap<String, EventListener> slicers = new HashMap<>();
@@ -161,8 +210,8 @@ public class UserInterface implements Runnable {
 				selectedDataset = (String) cb.getSelectedItem(); 
 				analyzer = new Analyzer(selectedDataset);
 				slicerArea = slicerArea(panel);
-				panel.remove(1);
-				panel.add(slicerArea, 1);
+				panel.remove(2);
+				panel.add(slicerArea, 2);
 				panel.revalidate();
 				panel.repaint();
 			}
@@ -237,6 +286,13 @@ public class UserInterface implements Runnable {
 		
 		// These are the actual panels that will be added
 		panel.add(fileSelection);
+		
+		JPanel jp = new JPanel(new GridLayout(1, 2));
+		jp.add(new JCheckBox());
+		jp.add(graphType());
+		
+		panel.add(jp);
+		
 		panel.add(slicerArea);
 		panel.add(buttonArea);						
 		panel.setPreferredSize(new Dimension(800, 500));
