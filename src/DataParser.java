@@ -1,19 +1,20 @@
 import java.io.*;
 import java.util.*;
 
-public class Analyzer {
+public class DataParser {
 	
 	private HashMap<String, String> recordTypes = new HashMap<>();
-	private HashMap<String, String> records = new HashMap<>();	
+	private HashMap<Integer, HashMap<String, String>> records = new HashMap<>();	
 	String dataFolder = "data/";
 	
 	/**
-	 * Constructor for the Analyzer class.
+	 * Constructor for the DataParser class. This will go through and parse the data. It will then
+	 * pass to the DataProcessor class to create a graph
 	 * @param dataset The dataset to be analyzed. Must be stored in the 'data' folder
 	 * and be a .csv file
 	 * @param recordValues
 	 */
-	public Analyzer(String dataset) {
+	public DataParser(String dataset) {
 		
 		if (dataset != null) {
 			try {
@@ -30,9 +31,11 @@ public class Analyzer {
 				}
 				
 				// Build out the records data structure
+				int recordPrimaryKey = 0;
 				while (in.hasNextLine()) {
 					String temp = in.nextLine().replaceAll(", ", ";");
 					recordValues = temp.split(",");
+					HashMap<String, String> tempRecord = new HashMap<>();
 					for (int i = 0; i < Math.min(recordKeys.length, recordValues.length); i++) {
 						
 						// Add in the record types to the HashMap. All numbers will be cast to double
@@ -55,9 +58,11 @@ public class Analyzer {
 									recordTypes.put(recordKeys[i], "String");
 								}	
 							}	
-						}					
-						records.put(recordKeys[i], recordValues[i]);
-					}				
+						}						
+						tempRecord.put(recordKeys[i], recordValues[i]);
+					}
+					records.put(recordPrimaryKey, tempRecord);
+					recordPrimaryKey++;
 				}
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -112,15 +117,21 @@ public class Analyzer {
 	 * @return TBD. Perhaps this could write directly to the output? Or pass whatever is needed
 	 * to the visualizer
 	 */
-	public double pivotDataBy(ArrayList<String> fields) {
-		return 0.0;
+	public HashMap<String, Double> pivotDataBy(String field, String values) {
+		HashMap<String, Double> output = new HashMap<>();
+		
+//		for (int i : records.keySet()) {
+//			System.out.println(records.get(i).toString());
+//		}
+		return output;
 	}
 		
 	public static void main(String[] args) {
-		String[] columns = {"this", "is", "a", "column"};
-		String[] values = {"50.0", "40", "String val", "string"};
-		
-		Analyzer newRecord = new Analyzer("District Employees and Finance - District Budget");
-		System.out.println(newRecord.getGroupByFields());
+//		String[] columns = {"this", "is", "a", "column"};
+//		String[] values = {"50.0", "40", "String val", "string"};
+//		
+		DataParser newRecord = new DataParser("District Employees and Finance - District Budget");
+//		System.out.println(newRecord.getGroupByFields());
+		newRecord.pivotDataBy("1", "2");
 	}
 }

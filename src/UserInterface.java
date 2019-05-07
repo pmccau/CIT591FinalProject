@@ -7,10 +7,10 @@ import javax.swing.border.*;
 
 public class UserInterface implements Runnable {
 	
-	private Analyzer analyzer = new Analyzer(null);
+	private DataParser dataparser = new DataParser(null);
 	private String dataFolder = "data/";
 	private String selectedDataset, selectedNumericalValue, selectedGraphType;
-	private JPanel slicerArea, fileSelection, topLevel, buttonArea;
+	private JPanel slicerArea, fileSelection, topLevel, buttonArea, fieldSelection;
 	private JFrame frame = new JFrame("PhillyOpenData Analyzer");
 	private String exportLocation = "";
 	
@@ -52,7 +52,7 @@ public class UserInterface implements Runnable {
 		
 		// Add the panel with the label to select fields
 		gridPanel.add(panel);
-		JLabel selectSlicersLabel = new JLabel("Select numerical field to visualize");
+		JLabel selectSlicersLabel = new JLabel("Select descriptive field");
 		selectSlicersLabel.setFont(new Font("Slicers", Font.PLAIN, 24));;
 		gridPanel.add(selectSlicersLabel);
 		return gridPanel;
@@ -97,6 +97,26 @@ public class UserInterface implements Runnable {
 	}
 	
 	/**
+	 * This will return the selection area for the field to be pivoted by
+	 * @return
+	 */
+	public JPanel fieldSelectionArea() {
+		JPanel panel = new JPanel(new GridLayout(3, 1));
+		ArrayList<String> fields = dataparser.getGroupByFields();
+		
+		JComboBox jcb = new JComboBox(fields.toArray());
+		panel.add(jcb);
+		jcb.setBackground(Color.WHITE);
+		jcb.setPreferredSize(new Dimension(200, 30));
+		panel.add(new JPanel());
+		JLabel label = new JLabel("Select numerical field");
+		label.setFont(new Font("Field selection", Font.PLAIN, 24));
+		panel.add(label);
+		return panel;
+	}
+	
+	
+	/**
 	 * This method will take in the dataset that is being analyzed. From there,
 	 * it will generate radio button slicers on how to visualize the data. This will
 	 * be contained in the middle of the topLevel panel. This will need to interact
@@ -106,7 +126,7 @@ public class UserInterface implements Runnable {
 	 * @return
 	 */
 	public JPanel slicerArea(JPanel topLevel) {
-		ArrayList<String> fields = analyzer.getNumericalFields();
+		ArrayList<String> fields = dataparser.getNumericalFields();
 		
 		// Create the panel that will house the checkboxes
 		JPanel panel = new JPanel(new GridLayout((fields.size() / 3 + 1), 3));
@@ -198,6 +218,7 @@ public class UserInterface implements Runnable {
 		slicerArea = slicerArea(panel);
 		fileSelection = fileSelection(panel);
 		buttonArea = buttonArea();
+		fieldSelection = fieldSelectionArea();
 		
 		//----------------------------------------------------------------------------------------
 		//                                   EVENT LISTENERS SECTION
@@ -208,10 +229,22 @@ public class UserInterface implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				selectedDataset = (String) cb.getSelectedItem(); 
-				analyzer = new Analyzer(selectedDataset);
+				dataparser = new DataParser(selectedDataset);
 				slicerArea = slicerArea(panel);
+				fieldSelection = fieldSelectionArea();
+
+				// Add and remove the group by panel
+				JPanel temp = (JPanel) panel.getComponent(1);
+				temp.remove(0);
+				temp.add(fieldSelection, 0);
+				temp.revalidate();
+				temp.repaint();
+										
+				// Add and remove the slicer panel
 				panel.remove(2);
 				panel.add(slicerArea, 2);
+				
+				// Revalidate everything
 				panel.revalidate();
 				panel.repaint();
 			}
@@ -234,10 +267,22 @@ public class UserInterface implements Runnable {
 					public void actionPerformed(ActionEvent e) {
 						JComboBox cb = (JComboBox) e.getSource();
 						selectedDataset = (String) cb.getSelectedItem(); 
-						analyzer = new Analyzer(selectedDataset);
+						dataparser = new DataParser(selectedDataset);
 						slicerArea = slicerArea(panel);
-						panel.remove(1);
-						panel.add(slicerArea, 1);
+						fieldSelection = fieldSelectionArea();
+						
+						// Add and remove the group by panel
+						JPanel temp = (JPanel) panel.getComponent(1);
+						temp.remove(0);
+						temp.add(fieldSelection, 0);
+						temp.revalidate();
+						temp.repaint();
+												
+						// Add and remove the slicer panel
+						panel.remove(2);
+						panel.add(slicerArea, 2);
+						
+						// Revalidate everything
 						panel.revalidate();
 						panel.repaint();
 					}
@@ -288,7 +333,7 @@ public class UserInterface implements Runnable {
 		panel.add(fileSelection);
 		
 		JPanel jp = new JPanel(new GridLayout(1, 2));
-		jp.add(new JCheckBox());
+		jp.add(fieldSelection);
 		jp.add(graphType());
 		
 		panel.add(jp);

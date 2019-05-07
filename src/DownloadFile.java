@@ -50,6 +50,9 @@ public class DownloadFile {
 	 * This method will read data from specified URL and save the file locally
 	 */
 	public void saveFile() {
+		if (outputFile.exists()) {
+			return;
+		}
 		try {
 			URL url = new URL(link);
 			HttpURLConnection http = (HttpURLConnection) url.openConnection();
