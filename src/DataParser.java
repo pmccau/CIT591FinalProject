@@ -117,13 +117,66 @@ public class DataParser {
 	 * @return TBD. Perhaps this could write directly to the output? Or pass whatever is needed
 	 * to the visualizer
 	 */
-	public HashMap<String, Double> pivotDataBy(String field, String values) {
-		HashMap<String, Double> output = new HashMap<>();
+	public HashMap<String, Double> pivotDataBy(String field, String values, boolean showAsPercentage, int limitResults) {
+		// Used to sum the data
+		HashMap<String, Double> summedDataset = new HashMap<>();
+		double total = 0;
+				
+		// Iterate over all records, summing the numerical field by the descriptive field
+		for (int i : records.keySet()) {
+			String recordDescriptor = records.get(i).get(field).trim();
+			double recordValue = 0;
+			if (records.get(i).get(values) != null) {
+				try {
+					recordValue = Double.parseDouble(records.get(i).get(values));
+				} catch (NumberFormatException e) {
+					// Do nothing
+				}
+			}
+			total += recordValue; // Increase the total in case it is shown by percentage
+			
+			// If the record is already in the dataset, add it to what's there. Otherwise, create it
+			if (summedDataset.containsKey(recordDescriptor)) {
+				summedDataset.put(recordDescriptor, summedDataset.get(recordDescriptor) + recordValue);
+			} else {
+				summedDataset.put(recordDescriptor, recordValue);
+			}			
+		}
 		
-//		for (int i : records.keySet()) {
-//			System.out.println(records.get(i).toString());
-//		}
-		return output;
+		// Convert to percentage if needed
+		if (showAsPercentage) {
+			for (String str : summedDataset.keySet()) {
+				summedDataset.put(str, summedDataset.get(str) / total);
+			}
+		}
+				
+		
+		// If the results should be limited to a specific number, this will kick in
+		if (limitResults < summedDataset.size()) {
+			double subTotal = 0;
+			
+			HashMap<String, Double> temp = new HashMap<>();
+			
+			// Convert to arrayList to sort
+			ArrayList<Double> vals = new ArrayList<>();
+			for (double d : summedDataset.values()) {
+				vals.add(d);
+			}
+			
+			Collections.sort(vals);; // Sort the values, pick the last one that's under threshold
+			double cutoffVal = vals.get(vals.size() - (limitResults - 1));
+			
+			for (String str : summedDataset.keySet()) {
+				if (summedDataset.get(str) >= cutoffVal && temp.size() < limitResults) {
+					temp.put(str, summedDataset.get(str));
+					subTotal += summedDataset.get(str);
+				}
+			}
+			temp.put("Other", total - subTotal);
+			return temp;
+		}
+		
+		return summedDataset;
 	}
 		
 	public static void main(String[] args) {
@@ -131,7 +184,6 @@ public class DataParser {
 //		String[] values = {"50.0", "40", "String val", "string"};
 //		
 		DataParser newRecord = new DataParser("District Employees and Finance - District Budget");
-//		System.out.println(newRecord.getGroupByFields());
-		newRecord.pivotDataBy("1", "2");
+//		newRecord.pivotDataBy("ACTIVITY_NAME", "OPERATING_CYEST_LUMPSUM_AMT", true);
 	}
 }

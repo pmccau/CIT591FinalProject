@@ -1,10 +1,15 @@
+import java.awt.Dimension;
 import java.util.*;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RefineryUtilities;
 
 
 /*
@@ -108,15 +113,51 @@ public class Graph {
 		PointValues.add(point);
 	}
 	
+	
+	/**
+	 * 	
+	 * @param title
+	 * @param records
+	 * @return
+	 */
+	public static JPanel generatePieChart(String title, HashMap<String, Double> records) {
+		
+		// Add the values to a DefaultKeyedValues data structure
+		DefaultKeyedValues kvPairs = new DefaultKeyedValues();
+		for (String str : records.keySet()) {
+			kvPairs.addValue(str, records.get(str));
+		}
+		DefaultPieDataset finalData = new DefaultPieDataset(kvPairs);
+		Plot p = new PiePlot(finalData);
+		
+		// This gets nested in a ChartPanel below
+//		JFreeChart chart = new JFreeChart(title, p);
+		JFreeChart chart = ChartFactory.createPieChart(title, finalData, false, false, false);
+		
+		
+		// Finally, create the panel and add the chart
+		JPanel output = new JPanel();
+		output.add(new ChartPanel(chart));
+		return output;
+	}
+	
+	
 	public static void main(String[] args) {
-		int[] arr = {1, 2, 3};
-		DefaultKeyedValues dfk = new DefaultKeyedValues();
+		
+		DataParser newRecord = new DataParser("District Employees and Finance - District Budget");
+		HashMap<String, Double> dataset = newRecord.pivotDataBy("ACTIVITY_NAME", "OPERATING_CYEST_LUMPSUM_AMT", false, 7);
+		
+				
+		JFrame demo = new JFrame();
+		demo.setSize(new Dimension(800, 600));
+		
+		JPanel temp = generatePieChart("ACTIVITY_NAME", dataset);
 		
 		
-		DefaultPieDataset defaultData = new DefaultPieDataset(dfk);
-		Plot p = new PiePlot(defaultData);
+		demo.add(temp);
 		
-		JFreeChart jfc = new JFreeChart("title", p);
+		RefineryUtilities.centerFrameOnScreen( demo );    
+	    demo.setVisible( true ); 
 	}
 	
 }
