@@ -1,12 +1,19 @@
 import java.util.*;
 
+import org.jfree.chart.*;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.data.DefaultKeyedValues;
+import org.jfree.data.general.DefaultPieDataset;
+
+
 /*
  * This will serve as the output for some functions in the Data Processor
  * Any graph with pairs of values (Bar Chart, Line Graph, Scatter Plot, etc)
  */
 
 public class Graph {
-
+	
 	String graphType;	// Bar chart, pie chart, scatter plot
 	double x_axis_min;
 	double x_axis_max;
@@ -101,5 +108,15 @@ public class Graph {
 		PointValues.add(point);
 	}
 	
+	public static void main(String[] args) {
+		int[] arr = {1, 2, 3};
+		DefaultKeyedValues dfk = new DefaultKeyedValues();
+		
+		
+		DefaultPieDataset defaultData = new DefaultPieDataset(dfk);
+		Plot p = new PiePlot(defaultData);
+		
+		JFreeChart jfc = new JFreeChart("title", p);
+	}
 	
 }
