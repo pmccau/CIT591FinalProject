@@ -40,6 +40,7 @@ public class DataProcessor {
 	private HashMap<String, Graph> GetGraphs() {	
 	
 		// Use search parameters to decide **************
+		return new HashMap<String, Graph>(); // ----- PLACEHOLDER VAR -----
 	}
 	
 	/**
@@ -50,6 +51,7 @@ public class DataProcessor {
 	private HashMap<String, String> GetSummary() {	
 	
 		// Use search parameters to decide **************
+		return new HashMap<String, String>(); // ----- PLACEHOLDER VAR -----
 	}
 	
 	
@@ -65,11 +67,11 @@ public class DataProcessor {
 	private double average (int column) {
 		double average = 0;
 		int setCount = 0;
-		for (String School : relevantData.keySet()) {
-			average += Double.parseDouble(relevantData.get(School).get(column));
+		for (String school : relevantData.keySet()) {
+			average += Double.parseDouble(relevantData.get(school).get(column));
 			setCount++;
 		}
-		return average/setCount;
+		return average / setCount;
 	}
 	
 	/**
@@ -128,7 +130,7 @@ public class DataProcessor {
 		int YColumnInt = Integer.parseInt(Y_column);
 		
 		// If not a value, enter as empty string: ""
-		
+		HashMap<String, Double> data = new HashMap<>(); // ----- PLACEHOLDER VAR -----
 		// Create graph ***********
 		Graph barChart = new Graph ("Bar Chart", data);
 		return barChart;
@@ -145,6 +147,7 @@ public class DataProcessor {
 		// If not a value, enter as empty string: ""
 
 		// Create graph *************** 
+		HashMap<String, Double> data = new HashMap<>(); // ----- PLACEHOLDER VAR -----
 		
 		Graph scatterPlot = new Graph ("Scatter Plot", data);
 		return scatterPlot;
