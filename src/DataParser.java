@@ -54,7 +54,6 @@ public class DataParser {
 								try {
 									Double.parseDouble(recordValues[i]);
 								} catch (NumberFormatException e) {
-									System.out.println("Caught an error at " + recordKeys[i] +"\tValue: " + recordValues[i]);
 									recordTypes.put(recordKeys[i], "String");
 								}	
 							}	
@@ -177,13 +176,5 @@ public class DataParser {
 		}
 		
 		return summedDataset;
-	}
-		
-	public static void main(String[] args) {
-//		String[] columns = {"this", "is", "a", "column"};
-//		String[] values = {"50.0", "40", "String val", "string"};
-//		
-		DataParser newRecord = new DataParser("District Employees and Finance - District Budget");
-//		newRecord.pivotDataBy("ACTIVITY_NAME", "OPERATING_CYEST_LUMPSUM_AMT", true);
 	}
 }
