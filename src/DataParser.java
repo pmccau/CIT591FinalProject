@@ -6,13 +6,10 @@ public class DataParser {
 	private HashMap<String, String> recordTypes = new HashMap<>();
 	private HashMap<Integer, HashMap<String, String>> records = new HashMap<>();	
 	String dataFolder = "data/";
-	
+
 	/**
-	 * Constructor for the DataParser class. This will go through and parse the data. It will then
-	 * pass to the DataProcessor class to create a graph
-	 * @param dataset The dataset to be analyzed. Must be stored in the 'data' folder
-	 * and be a .csv file
-	 * @param recordValues
+	 * Constructof for the class. This takes in a dataset to be used in analysis/graphing
+	 * @param dataset The name of the dataset, not file location
 	 */
 	public DataParser(String dataset) {
 		
@@ -108,15 +105,17 @@ public class DataParser {
 	public String getDataType(String field) {
 		return recordTypes.get(field);
 	}
-	
+
 	/**
-	 * Stub for the pivot by method. This will be where the data gets sliced up. This will
-	 * be where most of the heavy lifting takes place in this class 
-	 * @param fields The fields (in order) to be pivoted by
-	 * @return TBD. Perhaps this could write directly to the output? Or pass whatever is needed
-	 * to the visualizer
+	 * This method generates a HashMap for use in a Graph object.
+	 * @param field The field by which the data will be organized. ex: School Name
+	 * @param values The value field by which the data will be summed
+	 * @param showAsPercentage Whether the data should be shown as a percentage
+	 * @param limitResults How many individual results should show before being grouped into 'Other'
+	 * @return A HashMap<String, Double> that will contain Key, Value for categories
 	 */
-	public HashMap<String, Double> pivotDataBy(String field, String values, boolean showAsPercentage, int limitResults) {
+	public HashMap<String, Double> pivotDataBy(String field, String values,
+											   boolean showAsPercentage, int limitResults) {
 		// Used to sum the data
 		HashMap<String, Double> summedDataset = new HashMap<>();
 		double total = 0;
@@ -162,8 +161,8 @@ public class DataParser {
 				vals.add(d);
 			}
 			
-			Collections.sort(vals);; // Sort the values, pick the last one that's under threshold
-			double cutoffVal = vals.get(vals.size() - (limitResults - 1));
+			Collections.sort(vals, Collections.reverseOrder()); // Sort the values, pick the last one that's under threshold
+			double cutoffVal = vals.get(limitResults - 1);
 			
 			for (String str : summedDataset.keySet()) {
 				if (summedDataset.get(str) >= cutoffVal && temp.size() < limitResults) {

@@ -133,15 +133,11 @@ public class UserInterface implements Runnable {
 
 
 	/**
-	 * This method will take in the dataset that is being analyzed. From there,
-	 * it will generate radio button slicers on how to visualize the data. This will
-	 * be contained in the middle of the topLevel panel. This will need to interact
-	 * with the I/O methods in order to loop through and generate the possible fields.
-	 * We could hardcode this, but it might get unwieldy
-	 * @param dataSet The dataset being analyzed
-	 * @return
+	 * This method builds the slicer area, which contains radio buttons
+	 * for deciding which numerical field to be used in the graphing
+	 * @return a JPanel containing the slicers
 	 */
-	public JPanel slicerArea(JPanel topLevel) {
+	public JPanel slicerArea() {
 		ArrayList<String> fields = dataparser.getNumericalFields();
 
 		// Create the panel that will house the checkboxes
@@ -258,7 +254,7 @@ public class UserInterface implements Runnable {
 		// Could store the buttons/event listeners in a HashMap. 
 		HashMap<String, EventListener> slicers = new HashMap<>();
 
-		slicerArea = slicerArea(panel);
+		slicerArea = slicerArea();
 		fileSelection = fileSelection(panel);
 		buttonArea = buttonArea();
 		fieldSelection = fieldSelectionArea();
@@ -273,7 +269,7 @@ public class UserInterface implements Runnable {
 				JComboBox cb = (JComboBox) e.getSource();
 				selectedDataset = (String) cb.getSelectedItem(); 
 				dataparser = new DataParser(selectedDataset);
-				slicerArea = slicerArea(panel);
+				slicerArea = slicerArea();
 				fieldSelection = fieldSelectionArea();
 
 				// Add and remove the group by panel
@@ -311,7 +307,7 @@ public class UserInterface implements Runnable {
 						JComboBox cb = (JComboBox) e.getSource();
 						selectedDataset = (String) cb.getSelectedItem(); 
 						dataparser = new DataParser(selectedDataset);
-						slicerArea = slicerArea(panel);
+						slicerArea = slicerArea();
 						fieldSelection = fieldSelectionArea();
 
 						// Add and remove the group by panel
