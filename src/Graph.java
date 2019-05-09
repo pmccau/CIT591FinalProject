@@ -57,6 +57,10 @@ public class Graph {
 		return output;
 	}
 	
+	/**
+	 * This method will export a graph as a JPEG
+	 * @param fullFilepath The full filepath (do not include file extension)
+	 */
 	public void exportGraph(String fullFilepath) {
 		try {
 			ChartUtilities.saveChartAsJPEG(new File(fullFilepath + ".jpg"), finalChart, 800, 600);

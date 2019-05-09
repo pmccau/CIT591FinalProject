@@ -147,7 +147,15 @@ public class DataParser {
 				summedDataset.put(str, summedDataset.get(str) / total);
 			}
 		}
-				
+		
+		// Remove zero values
+		HashMap<String, Double> tempHash = new HashMap<>();
+		tempHash = (HashMap<String, Double>) summedDataset.clone();
+		for (String str : tempHash.keySet()) {
+			if (summedDataset.get(str) <= 0) {
+				summedDataset.remove(str);
+			}
+		}
 		
 		// If the results should be limited to a specific number, this will kick in
 		if (limitResults < summedDataset.size()) {
