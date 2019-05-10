@@ -295,7 +295,7 @@ public class UserInterface implements Runnable {
 			public void actionPerformed(ActionEvent e) {
 				HashMap<String, String> datasets = DownloadFile.getDatasets();
 				for (String str : datasets.keySet()) {
-					DownloadFile df = new DownloadFile(datasets.get(str), new File("data\\" + str + ".csv"));
+					DownloadFile df = new DownloadFile(datasets.get(str), new File("data/" + str + ".csv"));
 					df.saveFile();
 				}
 				fileSelection = fileSelection(panel);
