@@ -173,12 +173,12 @@ public class DataParser {
 			double cutoffVal = vals.get(limitResults - 1);
 			
 			for (String str : summedDataset.keySet()) {
-				if (summedDataset.get(str) >= cutoffVal && temp.size() < limitResults) {
+				if (summedDataset.get(str) >= cutoffVal) {
 					temp.put(str, summedDataset.get(str));
 					subTotal += summedDataset.get(str);
 				}
 			}
-			temp.put("Other", total - subTotal);
+			temp.put("All Others (Avg.)", (total - subTotal) / (summedDataset.size() - temp.size()));
 			return temp;
 		}
 		

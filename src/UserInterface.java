@@ -309,7 +309,7 @@ public class UserInterface implements Runnable {
 						dataparser = new DataParser(selectedDataset);
 						slicerArea = slicerArea();
 						fieldSelection = fieldSelectionArea();
-
+						
 						// Add and remove the group by panel
 						JPanel temp = (JPanel) panel.getComponent(1);
 						temp.remove(0);
