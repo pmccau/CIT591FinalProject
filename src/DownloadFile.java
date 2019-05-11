@@ -27,9 +27,7 @@ public class DownloadFile {
 				"https://cdn.philasd.org/offices/performance/Open_Data/Budget_Staff/District_Budget/budget_information.csv");
 		datasets.put("School Performance - Out-of-School Suspensions", 
 				"https://cdn.philasd.org/offices/performance/Open_Data/School_Performance/Suspensions/School%20Profiles%20Suspensions%202016-2017.csv");
-		datasets.put("School Information - Pre-School Information", 
-				"https://cdn.philasd.org/offices/performance/Open_Data/School_Information/Pre_K/PREK_INFORMATION_2013_2014.csv");
-		
+				
 		return datasets;
 	}
 
