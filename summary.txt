@@ -1,0 +1,16 @@
+Project: Philly Data Visualizer
+
+Description: The original concept of this project was a program that could help us ot visualize publicly available data from the Philly Open Data website. We considered including a data science element involving statistical analysis, but opted to forego that in favor of visualization. 
+
+The end result is a program that can fetch datasets on its own, slice them by descriptive / numerical fields, then spit out a graph representing those selections in either pie or bar chart format. While our program only focuses on a few datasets currently, the structure is such that we could easily expand the scope to include many other datasets.
+
+Work Breakdown:
+ - UserInterface: Pat worked on this class
+ - DataProcessor: This was a true team effort where all three of us contributed
+ - DownloadFile: Yu worked on this class
+ - Graph: Elliot worked on this class
+ - Testing: This was a team effort, where everyone contributed
+
+Overall, while we each took on individual pieces, the project came together nicely as a team effort where each of us was in constant communication to ensure that we were working toward the same end.
+
+Github: https://github.com/pmccau/CIT591FinalProject
