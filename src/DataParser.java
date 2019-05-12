@@ -1,11 +1,15 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 public class DataParser {
 	
 	private HashMap<String, String> recordTypes = new HashMap<>();
 	private HashMap<Integer, HashMap<String, String>> records = new HashMap<>();	
 	String dataFolder = "data/";
+	public static HashMap<Pattern, String> regexPatterns = new HashMap<Pattern, String>();
 
 	/**
 	 * Constructof for the class. This takes in a dataset to be used in analysis/graphing
@@ -88,13 +92,67 @@ public class DataParser {
 	 */
 	public ArrayList<String> getNumericalFields() {
 		ArrayList<String> output = new ArrayList<>();
+		populateRegexPatterns();
 		for (String str : recordTypes.keySet()) {
 			if (getDataType(str).equals("double")) {
-				output.add(str);
+				output.add(numFieldsEnglish(str)); 
 			}
 		}
 		return output;
 	}
+	
+	/**
+	 * This method populates the Regex Patterns hashmap with code interpretations
+	 * @param name
+	 * @return
+	 */
+	public void populateRegexPatterns () {
+		Pattern term = Pattern.compile(".*sch.*");
+		regexPatterns.put(term, "School");
+		term = Pattern.compile(".*SCH.*");
+		regexPatterns.put(term, "School");
+		term = Pattern.compile(".*CYEST.*");
+		regexPatterns.put(term, "Year_Estimate");
+		term = Pattern.compile(".*AMT.*");
+		regexPatterns.put(term, "Amount");
+		term = Pattern.compile(".*TOT.*");
+		regexPatterns.put(term, "Total");
+		term = Pattern.compile(".*ACT.*");
+		regexPatterns.put(term, "Active");
+		term = Pattern.compile(".*FTE.*");
+		regexPatterns.put(term, "Full-Time_Employee");
+		term = Pattern.compile(".*LUMPSUM.*");
+		regexPatterns.put(term, "LumpSum");
+		term = Pattern.compile(".*susp.*");
+		regexPatterns.put(term, "Suspension");
+	}
+	
+	
+	/**
+	 * This method will take a numerical field's name and return the interpreted, English terms
+	 * @param name
+	 * @return
+	 */
+	public String numFieldsEnglish (String name) {
+		String[] str = name.split("_");
+		Matcher m;
+		String toReturn = "";
+		for (int i=0; i<str.length; i++) {
+			for (Pattern ptn: regexPatterns.keySet()) {
+				m = ptn.matcher(str[i]);
+				if (m.find()) {
+					str[i] = regexPatterns.get(ptn);
+				}
+				
+			}
+			toReturn = toReturn + str[i];
+			if (i != str.length-1) {
+				toReturn = toReturn + "_";
+			}
+		}
+		return toReturn;
+	}
+	
 	
 	/**
 	 * This method will return the data type of a given record. All numerical
