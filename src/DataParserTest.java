@@ -87,5 +87,14 @@ class DataParserTest {
 		DataParser dp = new DataParser("District Employees and Finance - District Budget");
 		assertEquals(dp.getDataType("FUNCTION_CLASS"), "String");
 	}
+	
+	/**
+	 * Edge case where the numerical column has some text fields - should be reclassed as String
+	 */
+	@Test
+	void testActivityCode() {
+		DataParser dp = new DataParser("District Employees and Finance - District Budget");
+		assertEquals(dp.getDataType("Active_CODE"), "String");
+	}
 
 }

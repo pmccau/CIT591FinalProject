@@ -13,7 +13,13 @@ class GraphTest {
 	 */
 	@Test
 	void testExportGraph() {
-		String filepath = "C:\\Users\\pmccau\\eclipse-workspace\\CIT591FinalProject\\test\\testGraph.jpeg";	
+		String filepath = "C:\\Users\\pmccau\\eclipse-workspace\\CIT591FinalProject\\test\\testGraph";	
+		File f = new File(filepath + ".jpg");
+		
+		// Delete the file if it already exists
+		if (f.exists()) {
+			f.delete();
+		}
 		
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");		
 		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_more_than_three_Suspension", false, 7);
@@ -22,11 +28,7 @@ class GraphTest {
 		g.generatePieChart();
 		g.exportGraph(filepath);
 		
-		File f = new File(filepath);
+		f = new File(filepath + ".jpg");		
 		assertTrue(f.exists());
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 }
