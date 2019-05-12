@@ -33,7 +33,7 @@ class GraphTest {
 	}
 	
 	/**
-	 * Test export of pie chart
+	 * Test export of bar chart
 	 */
 	@Test
 	void testExportGraphBar() {
