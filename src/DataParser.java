@@ -22,10 +22,14 @@ public class DataParser {
 				Scanner in = new Scanner(new File(dataFolder + dataset + ".csv"));
 				String[] recordKeys = null;
 				String[] recordValues = null;
+				populateRegexPatterns();
 				
 				// Quick check to make sure there's data...
 				if (in.hasNextLine()) {
 					recordKeys = in.nextLine().split(",");
+					for (int i=0; i<recordKeys.length; i++) {
+						recordKeys[i]=numFieldsEnglish(recordKeys[i]);
+					}
 				} else {
 					System.out.println("Did not find any lines");
 					return;
@@ -92,11 +96,9 @@ public class DataParser {
 	 */
 	public ArrayList<String> getNumericalFields() {
 		ArrayList<String> output = new ArrayList<>();
-		populateRegexPatterns();
 		for (String str : recordTypes.keySet()) {
 			if (getDataType(str).equals("double")) {
-				output.add(str); 
-				// output.add(numFieldsEnglish(str)); 
+				output.add(str);
 			}
 		}
 		return output;
