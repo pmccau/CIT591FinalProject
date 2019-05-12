@@ -25,7 +25,7 @@ class DataParserTest {
 		schools.add("STRAWBERRY MANSION HIGH SCHOOL");
 		boolean contained = true;
 		
-		HashMap<String, Double> map = dp.pivotDataBy("school_name", "sch_more_than_three_susp", false, 7);
+		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_more_than_three_susp", false, 7);
 		
 		for (String str : schools) {
 			if (!schools.contains(str)) {
@@ -51,7 +51,7 @@ class DataParserTest {
 		schools.add("EDISON, THOMAS A. HIGH SCHOOL");
 		boolean contained = true;
 		
-		HashMap<String, Double> map = dp.pivotDataBy("school_name", "total_students_suspended", false, 7);
+		HashMap<String, Double> map = dp.pivotDataBy("School_name", "total_students_suspended", false, 7);
 		
 		for (String str : schools) {
 			if (!schools.contains(str)) {
@@ -67,7 +67,7 @@ class DataParserTest {
 	@Test
 	void testDataTypesDoubleOneTimeSuspend() {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
-		assertEquals(dp.getDataType("sch_one_time_susp"), "double");
+		assertEquals(dp.getDataType("School_one_time_Suspension"), "double");
 	}
 	
 	/**
@@ -76,7 +76,7 @@ class DataParserTest {
 	@Test
 	void testDataTypesStringSchoolYear() {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
-		assertEquals(dp.getDataType("school_year"), "String");
+		assertEquals(dp.getDataType("School_year"), "String");
 	}
 	
 	/**

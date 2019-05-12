@@ -180,7 +180,7 @@ public class UserInterface implements Runnable {
 
 	/**
 	 * This method will be responsible for generating and housing the buttons:
-	 *  - Export to CSV
+	 *  - Export to JPEG
 	 *  - Visualize
 	 *  - Clear selections
 	 * It will need to interact with the visualization module and the I/O. Everything
