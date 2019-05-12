@@ -95,7 +95,8 @@ public class DataParser {
 		populateRegexPatterns();
 		for (String str : recordTypes.keySet()) {
 			if (getDataType(str).equals("double")) {
-				output.add(numFieldsEnglish(str)); 
+				output.add(str); 
+				// output.add(numFieldsEnglish(str)); 
 			}
 		}
 		return output;
