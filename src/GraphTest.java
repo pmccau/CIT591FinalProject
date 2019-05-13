@@ -13,7 +13,7 @@ class GraphTest {
 	 */
 	@Test
 	void testExportGraphPie() {
-		String filepath = "C:\\Users\\pmccau\\eclipse-workspace\\CIT591FinalProject\\test\\testGraphPie";	
+		String filepath = "test/testGraphPie";	
 		File f = new File(filepath + ".jpg");
 		
 		// Delete the file if it already exists
@@ -37,7 +37,7 @@ class GraphTest {
 	 */
 	@Test
 	void testExportGraphBar() {
-		String filepath = "C:\\Users\\pmccau\\eclipse-workspace\\CIT591FinalProject\\test\\testGraphBar";	
+		String filepath = "test/testGraphBar";	
 		File f = new File(filepath + ".jpg");
 		
 		// Delete the file if it already exists

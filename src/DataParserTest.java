@@ -105,4 +105,13 @@ class DataParserTest {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
 		assertEquals(dp.numFieldsEnglish("SCH_CYEST_TOT"), "School_Year_Estimate_Total");
 	}
+	
+	/**
+	 * Additional test on the name translation
+	 */
+	@Test
+	void testSuspensionEnglish() {
+		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
+		assertEquals(dp.numFieldsEnglish("school_more_than_three_susp"), "School_more_than_three_Suspension");
+	}
 }
