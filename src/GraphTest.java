@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.jfree.chart.JFreeChart;
 import org.junit.jupiter.api.Test;
 
 class GraphTest {
