@@ -201,7 +201,7 @@ public class DataParser {
 				summedDataset.put(recordDescriptor, recordValue);
 			}			
 		}
-		
+				
 		// Convert to percentage if needed
 		if (showAsPercentage) {
 			for (String str : summedDataset.keySet()) {
@@ -209,8 +209,18 @@ public class DataParser {
 			}
 		}
 		
+		HashMap<String, Double> tempHash = (HashMap<String, Double>) summedDataset.clone();
+		// Trim the quotations
+		for (String str : summedDataset.keySet()) {
+			if (str.contains("\"")) {
+				double tempVal = tempHash.get(str);
+				tempHash.remove(str);
+				tempHash.put(str.replace("\"", ""), tempVal);
+			}
+		}
+		summedDataset = tempHash;
+		
 		// Remove zero values
-		HashMap<String, Double> tempHash = new HashMap<>();
 		tempHash = (HashMap<String, Double>) summedDataset.clone();
 		for (String str : tempHash.keySet()) {
 			if (summedDataset.get(str) <= 0) {

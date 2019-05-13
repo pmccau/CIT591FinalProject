@@ -14,21 +14,18 @@ class DataParserTest {
 	void testSuspensionsBySchoolMoreThanThree() {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
 		ArrayList<String> schools = new ArrayList<>();
-		schools.add("KING, MARTIN LUTHER HIGH SCH.");
-		schools.add("NORTHEAST HIGH SCHOOL");
+		schools.add("KING;MARTIN LUTHER HIGH SCH.");
 		schools.add("ROOSEVELT ELEMENTARY SCHOOL");
-		schools.add("LINCOLN, ABRAHAM HIGH SCHOOL");
-		schools.add("FRANKLIN, BENJAMIN HIGH SCHOOL");
-		schools.add("RHOADS, JAMES SCHOOL");
-		schools.add("MEADE, GEN. GEORGE G. SCHOOL");
-		schools.add("OVERBROOK HIGH SCHOOL");
+		schools.add("LINCOLN;ABRAHAM HIGH SCHOOL");
+		schools.add("RHOADS;JAMES SCHOOL");
+		schools.add("MEADE;GEN. GEORGE G. SCHOOL");
 		schools.add("STRAWBERRY MANSION HIGH SCHOOL");
 		boolean contained = true;
 		
-		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_more_than_three_susp", false, 7);
+		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_more_than_three_Suspension", false, 7);
 		
 		for (String str : schools) {
-			if (!schools.contains(str)) {
+			if (!map.containsKey(str)) {
 				contained = false;
 			}
 		}
@@ -39,26 +36,51 @@ class DataParserTest {
 	 * Check to make sure that the number of total suspensions matches
 	 */
 	@Test
-	void testSuspensionsBySchoolTotal() {
+	void testSuspensionsBySchoolTwoTime() {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
 		ArrayList<String> schools = new ArrayList<>();
 		schools.add("NORTHEAST HIGH SCHOOL");
-		schools.add("LINCOLN, ABRAHAM HIGH SCHOOL");
-		schools.add("KING, MARTIN LUTHER HIGH SCH.");
+		schools.add("LINCOLN;ABRAHAM HIGH SCHOOL");
+		schools.add("KING;MARTIN LUTHER HIGH SCH.");
 		schools.add("ROOSEVELT ELEMENTARY SCHOOL");
 		schools.add("OVERBROOK HIGH SCHOOL");
-		schools.add("WASHINGTON, GEORGE HIGH SCHOOL");
-		schools.add("EDISON, THOMAS A. HIGH SCHOOL");
+		schools.add("HARDING;WARREN G. MIDDLE SCH");
+		schools.add("FRANKLIN;BENJAMIN HIGH SCHOOL");
 		boolean contained = true;
 		
-		HashMap<String, Double> map = dp.pivotDataBy("School_name", "total_students_suspended", false, 7);
+		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_two_time_Suspension", false, 7);
 		
 		for (String str : schools) {
-			if (!schools.contains(str)) {
+			if (!map.containsKey(str)) {
 				contained = false;
 			}
 		}
 		assertTrue(contained);
+	}
+	
+	/**
+	 * Check to make sure that the All Others (Avg.) field is coming through
+	 */
+	@Test
+	void testSuspensionsAllOthers() {
+		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
+		ArrayList<String> schools = new ArrayList<>();
+		HashMap<String, Double> map = dp.pivotDataBy("School_name", "School_two_time_Suspension", false, 7);
+				
+		assertTrue(map.containsKey("All Others (Avg.)"));
+	}
+	
+	/**
+	 * Check to make sure that the All Others (Avg.) field does not come through when below
+	 * threshold
+	 */
+	@Test
+	void testBudgetRunDate() {
+		DataParser dp = new DataParser("District Employees and Finance - District Budget");
+		ArrayList<String> schools = new ArrayList<>();
+		HashMap<String, Double> map = dp.pivotDataBy("RUN_DATE", "GRANT_Year_Estimate_LumpSum_Amount", false, 7);
+				
+		assertTrue(!map.containsKey("All Others (Avg.)"));
 	}
 	
 	/**
@@ -105,7 +127,7 @@ class DataParserTest {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
 		assertEquals(dp.numFieldsEnglish("SCH_CYEST_TOT"), "School_Year_Estimate_Total");
 	}
-	
+		
 	/**
 	 * Additional test on the name translation
 	 */
@@ -114,4 +136,25 @@ class DataParserTest {
 		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
 		assertEquals(dp.numFieldsEnglish("school_more_than_three_susp"), "School_more_than_three_Suspension");
 	}
+	
+	/**
+	 * Spot checking some of the values in the graph
+	 */
+	@Test
+	void testValueSpotCheckOne() {
+		DataParser dp = new DataParser("District Employees and Finance - Full Time Employees");
+		HashMap<String, Double> map = dp.pivotDataBy("FUNCTION_NAME", "Active_Full-Time_Employee_Total", false, 7);
+		assertEquals(Math.round(map.get("Special Ed High Incidence")), 962);
+	}
+	
+	/**
+	 * Spot checking some of the values in the graph
+	 */
+	@Test
+	void testValueSpotCheckTwo() {
+		DataParser dp = new DataParser("District Employees and Finance - Full Time Employees");
+		HashMap<String, Double> map = dp.pivotDataBy("FUNCTION_NAME", "Active_Full-Time_Employee_Total", false, 7);
+		assertEquals(Math.round(map.get("Food Service")), 839);
+	}
+	
 }
