@@ -96,4 +96,13 @@ class DataParserTest {
 		DataParser dp = new DataParser("District Employees and Finance - District Budget");
 		assertEquals(dp.getDataType("Active_CODE"), "String");
 	}
+	
+	/**
+	 * Test that the name translator works
+	 */
+	@Test
+	void testNumFieldsEnglish() {
+		DataParser dp = new DataParser("School Performance - Out-of-School Suspensions");
+		assertEquals(dp.numFieldsEnglish("SCH_CYEST_TOT"), "School_Year_Estimate_Total");
+	}
 }
